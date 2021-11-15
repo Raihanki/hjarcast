@@ -1,1 +1,1 @@
-<div class="border-b border-gray-300 mx-4 my-2"></div>
+<div class="border-b border-gray-300 mx-4 my-2 mb-5"></div>

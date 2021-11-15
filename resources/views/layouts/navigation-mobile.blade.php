@@ -28,6 +28,7 @@
                 </x-nav-link>
             </li>
 
+            @can('show users')
             <li class="relative px-6 py-3">
                 <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.index')">
                     <x-slot name="icon">
@@ -41,16 +42,18 @@
                     {{ __('Users') }}
                 </x-nav-link>
             </li>
+            @endcan
 
             <x-divider></x-divider>
 
             {{-- playlist --}}
+            @can('create playlists', Auth::user())
             <div class="mx-2 px-3">
                 <span class="text-gray-600 uppercase text-sm font-bold">Playlist</span>
             </div>
 
             <li class="relative px-6 py-3">
-                <x-nav-link href="#" :active="request()->routeIs('users.index')">
+                <x-nav-link href="{{ route('playlists.index') }}" :active="request()->routeIs('playlists.*')">
                     <x-slot name="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -61,32 +64,16 @@
                     {{ __('Playlist Management') }}
                 </x-nav-link>
             </li>
-
-            {{-- Videos --}}
-            <div class="mx-2 px-3">
-                <span class="text-gray-600 uppercase text-sm font-bold">Video</span>
-            </div>
-
-            <li class="relative px-6 py-3">
-                <x-nav-link href="#" :active="request()->routeIs('users.index')">
-                    <x-slot name="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                        </svg>
-                    </x-slot>
-                    {{ __('Video Management') }}
-                </x-nav-link>
-            </li>
+            @endcan
 
             {{-- Tags --}}
+            @can('create tags', Model::class)
             <div class="mx-2 px-3">
                 <span class="text-gray-600 uppercase text-sm font-bold">Tag</span>
             </div>
 
             <li class="relative px-6 py-3">
-                <x-nav-link href="#" :active="request()->routeIs('users.index')">
+                <x-nav-link href="{{ route('tags.index') }}" :active="request()->routeIs('tags.*')">
                     <x-slot name="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -97,6 +84,7 @@
                     {{ __('Tag Management') }}
                 </x-nav-link>
             </li>
+            @endcan
 
             <x-divider></x-divider>
 
