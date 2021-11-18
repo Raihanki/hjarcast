@@ -16,8 +16,9 @@
         </div>
         <div class="my-3">
             @include('playlists._form', [
-            "type" => "Submit",
-            "route" => route('playlists.store')
+            "type" => "update",
+            "route" => route('playlists.update', $playlist->slug),
+            "playlist" => $playlist
             ])
         </div>
     </x-card>

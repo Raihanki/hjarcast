@@ -18,4 +18,9 @@ class TagController extends Controller
         $title = "Create New Tag";
         return view('tags/create', compact('title'));
     }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+    }
 }
