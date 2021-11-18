@@ -28,6 +28,7 @@ class PlaylistRequest extends FormRequest
             'thumbnail' => [Rule::requiredIf($this->routeIs('playlists.store')), 'mimes:jpeg,jpg,png', 'max:2048'],
             'name' => 'required|string',
             'description' => 'required',
+            'tags' => 'required|array',
             'price' => 'required'
         ];
     }

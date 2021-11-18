@@ -43,6 +43,19 @@
         @enderror
     </div>
     <div class="mt-5">
+        <x-label for="tags">Tags</x-label>
+        <select multiple name="tags[]" id="tags"
+            class="mt-1 w-full px-3 py-2 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition duration-75 @error('tags') border border-red-400 @enderror">
+            @foreach ($tags as $tag)
+            <option value="{{ $tag->id }}">{{ $tag->name }}
+            </option>
+            {{-- <option value="{{ $tag->id }}" @if($tag->id == $playlist->tags->id) selected @endif>{{ $tag->name }}
+                --}}
+            </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mt-5">
         <x-label for="price">Price</x-label>
         <input type="number" name="price"
             class="mt-1 w-full px-3 py-2 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition duration-75 @error('price') border border-red-400 @enderror"

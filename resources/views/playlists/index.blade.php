@@ -35,16 +35,23 @@
                     <tbody class="bg-white divide-y">
                         @foreach($playlists as $playlist)
                         <tr class="text-gray-700">
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-md">
                                 {{ $playlists->count() * ($playlists->currentpage() - 1) + $loop->iteration }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
-                                {{ $playlist->name }}
+                            <td class="px-4 py-3 text-md">
+                                <div class="block">
+                                    <div class="mb-1">{{ $playlist->name }}</div>
+                                    @foreach ($playlist->tags as $tag)
+                                    <div
+                                        class="inline-flex text-xs text-gray-600  bg-gray-200 px-2 py-1 rounded-lg shadow-sm">
+                                        {{ $tag->name }}</div>
+                                    @endforeach
+                                </div>
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-md">
                                 {{ $playlist->created_at->format('d F Y') }}
                             </td>
-                            <td class="px-4 py-3 text-sm" x-data="{'open' : false}">
+                            <td class="px-4 py-3 text-md" x-data="{'open' : false}">
                                 <form action="{{ route('playlists.destroy', $playlist->slug) }}" method="post">
                                     @method('delete')
                                     @csrf

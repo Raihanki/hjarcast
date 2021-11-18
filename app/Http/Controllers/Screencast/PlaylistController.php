@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PlaylistRequest;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
 
 class PlaylistController extends Controller
@@ -16,7 +17,7 @@ class PlaylistController extends Controller
     public function index()
     {
         $title = "Your Playlists";
-        $playlists = Playlist::paginate(10);
+        $playlists = Playlist::with('tags')->paginate(10);
         return view('playlists/index', compact('title', 'playlists'));
     }
 
@@ -24,7 +25,8 @@ class PlaylistController extends Controller
     {
         $title = "Create New Playlist";
         $playlist = new Playlist();
-        return view('playlists/create', compact('title', 'playlist'));
+        $tags = Tag::get();
+        return view('playlists/create', compact('title', 'playlist', 'tags'));
     }
 
     public function store(PlaylistRequest $request)
@@ -34,7 +36,9 @@ class PlaylistController extends Controller
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $data['thumbnail']->store('images/playlists');
         }
-        Auth::user()->playlists()->create($data);
+        $createdPlaylist = Auth::user()->playlists()->create($data);
+        $createdPlaylist->tags()->attach($data['tags']);
+
         session()->flash('message', 'Successfully created playlist');
         return redirect()->route('playlists.index');
     }
@@ -42,7 +46,8 @@ class PlaylistController extends Controller
     public function edit(Playlist $playlist)
     {
         $title = "Edit Playlist : " . $playlist->name;
-        return view('playlists.edit', compact('playlist', 'title'));
+        $tags = Tag::get();
+        return view('playlists.edit', compact('playlist', 'title', 'tags'));
     }
 
     public function update(PlaylistRequest $request, Playlist $playlist)
@@ -55,6 +60,8 @@ class PlaylistController extends Controller
         $data['slug'] = Str::slug($data['name'] . '-' . Str::random(6));
 
         $playlist->update($data);
+        $playlist->tags()->sync($data['tags']);
+
         session()->flash('message', "Playlist successfully updated");
         return redirect()->route('playlists.index');
     }
@@ -62,6 +69,7 @@ class PlaylistController extends Controller
     public function destroy(Playlist $playlist)
     {
         Storage::delete($playlist->thumbnail);
+        $playlist->tags()->detach();
         $playlist->delete();
         session()->flash('message', "Playlist successfully deleted");
         return redirect()->route('playlists.index');
