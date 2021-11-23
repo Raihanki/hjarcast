@@ -47,10 +47,8 @@
         <select multiple name="tags[]" id="tags"
             class="mt-1 w-full px-3 py-2 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition duration-75 @error('tags') border border-red-400 @enderror">
             @foreach ($tags as $tag)
-            <option value="{{ $tag->id }}">{{ $tag->name }}
+            <option value="{{ $tag->id }}" @if($playlist->tags()->find($tag->id)) selected @endif>{{ $tag->name }}
             </option>
-            {{-- <option value="{{ $tag->id }}" @if($tag->id == $playlist->tags->id) selected @endif>{{ $tag->name }}
-                --}}
             </option>
             @endforeach
         </select>

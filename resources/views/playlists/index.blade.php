@@ -28,7 +28,7 @@
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase bg-gray-50 border-b">
                             <th class="px-4 py-3">#</th>
                             <th class="px-4 py-3">Name</th>
-                            <th class="px-4 py-3">Published</th>
+                            <th class="px-4 py-3">Videos</th>
                             <th class="px-4 py-3">Actions</th>
                         </tr>
                     </thead>
@@ -40,8 +40,10 @@
                             </td>
                             <td class="px-4 py-3 text-md">
                                 <div class="block">
-                                    <div class="mb-1">{{ $playlist->name }}</div>
-                                    @foreach ($playlist->tags as $tag)
+                                    <a href="{{ route('videos.index', $playlist->slug) }}"
+                                        class="mb-1 cursor-pointer block text-blue-500 hover:underline hover:text-pink-500">{{
+                                        $playlist->name }}</a>
+                                    @foreach($playlist->tags as $tag)
                                     <div
                                         class="inline-flex text-xs text-gray-600  bg-gray-200 px-2 py-1 rounded-lg shadow-sm">
                                         {{ $tag->name }}</div>
@@ -49,12 +51,14 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-md">
-                                {{ $playlist->created_at->format('d F Y') }}
+                                {{ $playlist->videos_count }}
                             </td>
                             <td class="px-4 py-3 text-md" x-data="{'open' : false}">
                                 <form action="{{ route('playlists.destroy', $playlist->slug) }}" method="post">
                                     @method('delete')
                                     @csrf
+                                    <a href="{{ route('videos.create', $playlist->slug) }}" class="text-purple-500">Add
+                                        Video</a> |
                                     <a href="{{ route('playlists.edit', $playlist->slug) }}"
                                         class="text-purple-500">Edit</a> |
                                     <button type="button" @click="open = true"

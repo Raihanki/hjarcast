@@ -15,8 +15,8 @@
         </div>
         <div class="my-3">
             @include('tags._form', [
-            "route" => route('tags.store'),
-            "type" => "create"
+            "route" => route('tags.update', $tag->slug),
+            "type" => "update"
             ])
         </div>
     </x-card>

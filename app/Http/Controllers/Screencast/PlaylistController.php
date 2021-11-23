@@ -14,10 +14,14 @@ use Illuminate\Support\Facades\Storage;
 
 class PlaylistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Your Playlists";
-        $playlists = Playlist::with('tags')->paginate(10);
+        if ($request->has('s')) {
+            $playlists = Auth::user()->playlists()->where('name', 'like', '%' . $request->s . '%')->with('tags')->withCount('videos')->paginate(10);
+        } else {
+            $playlists = Auth::user()->playlists()->with('tags')->withCount('videos')->paginate(10);
+        }
         return view('playlists/index', compact('title', 'playlists'));
     }
 
@@ -45,6 +49,7 @@ class PlaylistController extends Controller
 
     public function edit(Playlist $playlist)
     {
+        $this->authorize('update', $playlist);
         $title = "Edit Playlist : " . $playlist->name;
         $tags = Tag::get();
         return view('playlists.edit', compact('playlist', 'title', 'tags'));
@@ -52,6 +57,7 @@ class PlaylistController extends Controller
 
     public function update(PlaylistRequest $request, Playlist $playlist)
     {
+        $this->authorize('update', $playlist);
         $data = $request->validated();
         if ($request->hasFile('thumbnail')) {
             Storage::delete($request->thumbnail);
@@ -68,6 +74,7 @@ class PlaylistController extends Controller
 
     public function destroy(Playlist $playlist)
     {
+        $this->authorize('destroy', $playlist);
         Storage::delete($playlist->thumbnail);
         $playlist->tags()->detach();
         $playlist->delete();

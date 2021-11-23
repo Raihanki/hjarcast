@@ -11,7 +11,7 @@
     @keydown.escape="closeSideMenu">
     <div class="py-4 text-gray-500 dark:text-gray-400">
         <a class="ml-6 text-lg font-bold text-gray-800" href="{{ route('dashboard') }}">
-            Windmill
+            H-Jar Cast
         </a>
         <ul class="mt-6">
             <li class="relative px-6 py-3">
@@ -43,8 +43,8 @@
                 </x-nav-link>
             </li>
             @endcan
-
             <x-divider></x-divider>
+
 
             {{-- playlist --}}
             @can('create playlists', Auth::user())
@@ -53,7 +53,8 @@
             </div>
 
             <li class="relative px-6 py-3">
-                <x-nav-link href="{{ route('playlists.index') }}" :active="request()->routeIs('playlists.*')">
+                <x-nav-link href="{{ route('playlists.index') }}"
+                    :active="request()->routeIs('playlists.*') || request()->routeIs('videos.*')">
                     <x-slot name="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -84,9 +85,9 @@
                     {{ __('Tag Management') }}
                 </x-nav-link>
             </li>
+            <x-divider></x-divider>
             @endcan
 
-            <x-divider></x-divider>
 
             <li class="relative px-6 py-3">
                 <button

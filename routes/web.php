@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Screencast\{PlaylistController, TagController};
+use App\Http\Controllers\Screencast\{PlaylistController, TagController, VideoController};
 use App\Models\Playlist;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // Playlist Routes
-    Route::prefix('playlists')->middleware('permission: create playlists')->group(function () {
+    Route::prefix('playlists')->middleware(['permission:create playlists'])->group(function () {
         Route::get('', [PlaylistController::class, 'index'])->name('playlists.index');
         Route::get('create', [PlaylistController::class, 'create'])->name('playlists.create');
         Route::post('store', [PlaylistController::class, 'store'])->name('playlists.store');
@@ -41,8 +41,25 @@ Route::middleware('auth')->group(function () {
     });
 
     // Tag Routes
-    Route::prefix('tags')->middleware('permission: create tags')->group(function () {
+    Route::prefix('tags')->middleware(['can:create tags'])->group(function () {
         Route::get('', [TagController::class, 'index'])->name('tags.index');
         Route::get('create', [TagController::class, 'create'])->name('tags.create');
+        Route::post('store', [TagController::class, 'store'])->name('tags.store');
+
+        Route::middleware(['can:update tags|create tags'])->group(function () {
+            Route::get('{tag:slug}/edit', [TagController::class, 'edit'])->name('tags.edit');
+            Route::put('{tag:slug}/update', [TagController::class, 'update'])->name('tags.update');
+            Route::delete('{tag:slug}/destroy', [TagController::class, 'destroy'])->name('tags.destroy');
+        });
+    });
+
+    //Videos Route
+    Route::prefix('videos')->middleware(['permission:create playlists'])->group(function () {
+        Route::get('{playlist:slug}/videos', [VideoController::class, 'index'])->name('videos.index');
+        Route::get('{playlist:slug}/create', [VideoController::class, 'create'])->name('videos.create');
+        Route::post('{playlist:slug}/store', [VideoController::class, 'store'])->name('videos.store');
+        Route::get('{playlist:slug}/{video:unique_video_id}/edit', [VideoController::class, 'edit'])->name('videos.edit');
+        Route::put('{playlist:slug}/{video:unique_video_id}/update', [VideoController::class, 'update'])->name('videos.update');
+        Route::delete('{playlist:slug}/{video:unique_video_id}/destroy', [VideoController::class, 'destroy'])->name('videos.destroy');
     });
 });
