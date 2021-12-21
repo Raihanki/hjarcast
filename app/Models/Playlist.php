@@ -9,6 +9,7 @@ class Playlist extends Model
 {
     use HasFactory;
     protected $fillable = ['thumbnail', 'name', 'slug', 'description', 'price'];
+    protected $withCount = ['videos'];
 
     public function user()
     {
@@ -23,5 +24,15 @@ class Playlist extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function purchased_by()
+    {
+        return $this->belongsToMany(User::class, 'purchases_playlists', 'playlist_id', 'user_id');
+    }
+
+    public function hasBuy(Playlist $playlist)
+    {
+        return $this->purchased_playlists()->find($playlist);
     }
 }

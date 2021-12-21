@@ -47,4 +47,30 @@ class User extends Authenticatable
     {
         return $this->hasMany(Playlist::class);
     }
+
+    public function purchased_playlists()
+    {
+        return $this->belongsToMany(Playlist::class, 'purchases_playlists', 'user_id', 'playlist_id')->withTimestamps();
+    }
+
+    public function buyPlaylist(Playlist $playlist)
+    {
+        $this->purchased_playlists()->save($playlist);
+        return $playlist;
+    }
+
+    public function hasBuy(Playlist $playlist)
+    {
+        return (bool) $this->purchased_playlists()->find($playlist);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

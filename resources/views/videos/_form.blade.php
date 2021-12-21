@@ -54,4 +54,9 @@
     </div>
     @enderror
 </div>
+<div class="mt-5 flex items-center">
+    <input type="checkbox" name="is_intro" id="is_intro" class="mr-3 rounded-md" @if($video->is_intro == true) checked
+    @endif>
+    <x-label for=" is_intro">Free Intro Video</x-label>
+</div>
 <x-button class="uppercase tracking-wider my-5" type="submit">{{ $type }}</x-button>

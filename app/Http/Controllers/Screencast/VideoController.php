@@ -31,10 +31,14 @@ class VideoController extends Controller
         $this->authorize('update', $playlist);
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title'] . '-' . Str::random(6));
-
+        if ($request->post('is_intro')) {
+            $data['is_intro'] = true;
+        } else {
+            $data['is_intro'] = false;
+        }
         $playlist->videos()->create($data);
         session()->flash('message', "Videos successfully created");
-        return redirect()->route('videos.index');
+        return redirect()->route('videos.index', $playlist);
     }
 
     public function edit(Playlist $playlist, Video $video)
@@ -48,7 +52,12 @@ class VideoController extends Controller
     {
         $this->authorize('update', $playlist);
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['slug'] . '-' . Str::random(6));
+        $data['slug'] = Str::slug($data['title'] . '-' . Str::random(6));
+        if ($request->post('is_intro')) {
+            $data['is_intro'] = true;
+        } else {
+            $data['is_intro'] = false;
+        }
         $video->update($data);
         session()->flash('message', "Videos successfully updated");
         return redirect()->route('videos.index', compact('playlist'));

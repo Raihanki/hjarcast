@@ -20,6 +20,7 @@ class PlaylistResource extends JsonResource
             "name" => $this->name,
             "slug" => $this->slug,
             "description" => $this->description,
+            "tags" => $this->tags->pluck('name'),
             "price" => [
                 "formated" => number_format($this->price, 0, '.', '.'),
                 "unformated" => $this->price
